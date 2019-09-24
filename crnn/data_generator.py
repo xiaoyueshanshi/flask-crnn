@@ -83,7 +83,7 @@ def gen_random_text(charsets, min_len, max_len):
 #     return data
  
  
-def captcha_batch_gen(batch_size, charsets, min_len, max_len, image_shape, blank_symbol, fonts):
+#def captcha_batch_gen(batch_size, charsets, min_len, max_len, image_shape, blank_symbol, fonts):
     """
     生成一个batch验证码数据集，每个batch包含三部分，分别是图像、每张图像的宽度、图像的标签
     :param batch_size: batch_size
@@ -99,23 +99,23 @@ def captcha_batch_gen(batch_size, charsets, min_len, max_len, image_shape, blank
     batch_images = []
     batch_image_widths = []
  
-    for _ in range(batch_size):
-        idxs, text = gen_random_text(charsets, min_len, max_len)
-        image = captcha_gen_img(text, image_shape, fonts)
-        image = image / 255
- 
-        pad_size = max_len - len(idxs)
-        if pad_size > 0:
-            idxs = np.pad(idxs, pad_width=(0, pad_size), mode='constant', constant_values=blank_symbol)
-        batch_image_widths.append(image.shape[1])
-        batch_labels.append(idxs)
-        batch_images.append(image)
- 
-    batch_labels = np.array(batch_labels, dtype=np.int32)
-    batch_images = np.array(batch_images, dtype=np.float32)
-    batch_image_widths = np.array(batch_image_widths, dtype=np.int32)
- 
-    return batch_images, batch_image_widths, batch_labels
+    # for _ in range(batch_size):
+    #     idxs, text = gen_random_text(charsets, min_len, max_len)
+        # image = captcha_gen_img(text, image_shape, fonts)
+    #     image = image / 255
+    #
+    #     pad_size = max_len - len(idxs)
+    #     if pad_size > 0:
+    #         idxs = np.pad(idxs, pad_width=(0, pad_size), mode='constant', constant_values=blank_symbol)
+    #     batch_image_widths.append(image.shape[1])
+    #     batch_labels.append(idxs)
+    #     batch_images.append(image)
+    #
+    # batch_labels = np.array(batch_labels, dtype=np.int32)
+    # batch_images = np.array(batch_images, dtype=np.float32)
+    # batch_image_widths = np.array(batch_image_widths, dtype=np.int32)
+    #
+    # return batch_images, batch_image_widths, batch_labels
 
 
 def threshold_demo(image_path):
