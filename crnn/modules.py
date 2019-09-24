@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.contrib import slim
 from tensorflow.contrib.rnn import BasicLSTMCell
-from data_generator import get_charsets, captcha_batch_gen, scence_batch_gen, get_img_label
+from .data_generator import get_charsets,scence_batch_gen, get_img_label
 
 
 def read_tfrecode(recode_data_path,batch_size,epoch):
@@ -253,46 +253,47 @@ class CRNN(object):
             batch_nums = int(np.ceil(len(train_img_list) / batch_size))
  
         if self.mode == 1:
-            for i in range(last_epoch, epoch):
-                for j in range(batch_nums):
-                    batch_images, batch_image_widths, batch_labels = captcha_batch_gen(
-                        batch_size,
-                        self.charsets,
-                        self.min_len,
-                        self.max_len,
-                        self.image_shape,
-                        len(self.charsets) + 1,
-                        fonts
-                    )
-                    _, loss, predict_label = sess.run(
-                        [self.train_op, self.loss_ctc, self.dense_predicts],
-                        feed_dict={self.images: batch_images,
-                                   self.image_widths: batch_image_widths,
-                                   self.labels: batch_labels}
-                    )
-                    if j % 1 == 0:
-                        print('epoch:%d/%d, batch:%d/%d, loss:%.4f, truth:%s, predict:%s' % (
-                            i, epoch,
-                            j, batch_nums,
-                            loss,
-                            ''.join([self.charsets[k] for k in batch_labels[0] if k != (len(self.charsets) + 1)]),
-                            ''.join([self.charsets[v] for v in predict_label[0] if v != -1])
-                        ))
-
-
-
-                #tf_recode
-
-
-
-                saver.save(sess, save_path=models_path, global_step=i)
-                summary = sess.run(merged,
-                                   feed_dict={
-                                       self.images: batch_images,
-                                       self.image_widths: batch_image_widths,
-                                       self.labels: batch_labels
-                                   })
-                writer.add_summary(summary, global_step=i)
+            # for i in range(last_epoch, epoch):
+            #     for j in range(batch_nums):
+            #         batch_images, batch_image_widths, batch_labels = captcha_batch_gen(
+            #             batch_size,
+            #             self.charsets,
+            #             self.min_len,
+            #             self.max_len,
+            #             self.image_shape,
+            #             len(self.charsets) + 1,
+            #             fonts
+            #         )
+            #         _, loss, predict_label = sess.run(
+            #             [self.train_op, self.loss_ctc, self.dense_predicts],
+            #             feed_dict={self.images: batch_images,
+            #                        self.image_widths: batch_image_widths,
+            #                        self.labels: batch_labels}
+            #         )
+            #         if j % 1 == 0:
+            #             print('epoch:%d/%d, batch:%d/%d, loss:%.4f, truth:%s, predict:%s' % (
+            #                 i, epoch,
+            #                 j, batch_nums,
+            #                 loss,
+            #                 ''.join([self.charsets[k] for k in batch_labels[0] if k != (len(self.charsets) + 1)]),
+            #                 ''.join([self.charsets[v] for v in predict_label[0] if v != -1])
+            #             ))
+            #
+            #
+            #
+            #     #tf_recode
+            #
+            #
+            #
+            #     saver.save(sess, save_path=models_path, global_step=i)
+            #     summary = sess.run(merged,
+            #                        feed_dict={
+            #                            self.images: batch_images,
+            #                            self.image_widths: batch_image_widths,
+            #                            self.labels: batch_labels
+            #                        })
+            #     writer.add_summary(summary, global_step=i)
+            pass
         else:
             for i in range(last_epoch, epoch):
                 random_index = random.sample(range(len(train_img_list)), len(train_img_list))
