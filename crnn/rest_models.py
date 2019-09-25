@@ -1,9 +1,15 @@
-import os
-import sys
-import time
+import json
 
 class CrnnModel:
-    def __init__(self,res_str,accuracy,timeuse):
-        self.res_str = res_str
+    result = str
+    def __init__(self,predict,tureValue,accuracy,crnnTime):
+        self.predict = predict
+        self.tureValue = tureValue
         self.accuracy = accuracy
-        self.timeuse = timeuse
+        self.crnnTime = crnnTime
+
+    def to_json(self):
+        return json.dumps(self,default=lambda o:o.__dict__,sort_keys=True,indent=4)
+    def json_str(self):
+        jstr = {'predict':self.predict,'tureValue':self.tureValue,'accuracy':self.accuracy,'crnnTime':self.crnnTime}
+        return(json.dumps(jstr))
